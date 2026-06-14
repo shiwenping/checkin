@@ -1,0 +1,7 @@
+﻿node_modules/
+*.log
+.env
+service_output.txt
+svc.txt
+server_output.txt
+tunnel_url.txt

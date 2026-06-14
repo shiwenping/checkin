@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日打卡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:#f4f6fa;color:#1a1d23;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.app{width:100%;max-width:460px}
+
+/* Dog */
+.dog-card{background:#fff;border-radius:20px;padding:8px 0;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:16px;position:relative;overflow:hidden;height:120px}
+.dog-run-track{position:relative;width:100%;height:100%}
+.dog-runner{position:absolute;top:12px;left:-10px;width:150px;height:100px;animation:runAcross 4s ease-in-out infinite;will-change:left,transform}
+.dog-runner.happy{animation:runHappy .8s ease-in-out !important}
+@keyframes runAcross{
+  0%{left:-10px;transform:scaleX(1)}
+  42%{left:calc(100% - 140px);transform:scaleX(1)}
+  46%{left:calc(100% - 140px);transform:scaleX(1)}
+  50%{left:calc(100% - 140px);transform:scaleX(-1)}
+  92%{left:-10px;transform:scaleX(-1)}
+  96%{left:-10px;transform:scaleX(-1)}
+  100%{left:-10px;transform:scaleX(1)}
+}
+@keyframes runHappy{
+  0%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
+  15%{left:calc(50% - 75px);transform:translateY(-18px) scaleX(1)}
+  30%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
+  45%{left:calc(50% - 75px);transform:translateY(-12px) scaleX(1)}
+  60%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
+  100%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
+}
+.dog-svg-wrap{display:block;width:150px;height:100px}
+@keyframes bodyBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes tailWag{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}
+@keyframes legL{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@keyframes legR{0%,100%{transform:rotate(12deg)}50%{transform:rotate(-12deg)}}
+@keyframes blink{0%,96%,100%{transform:scaleY(1)}97%,99%{transform:scaleY(.05)}}
+.body-bob{animation:bodyBob .3s ease-in-out infinite;transform-origin:78px 65px}
+.tail-group{animation:tailWag .2s ease-in-out infinite;transform-origin:108px 48px}
+.leg-left{animation:legL .25s ease-in-out infinite;transform-origin:55px 82px}
+.leg-right{animation:legR .25s ease-in-out infinite;transform-origin:78px 82px}
+.leg-bl{animation:legR .25s ease-in-out infinite;transform-origin:92px 82px}
+.leg-br{animation:legL .25s ease-in-out infinite;transform-origin:105px 82px}
+.dog-greeting{font-size:13px;color:#7c818b;position:absolute;bottom:10px;left:0;right:0;text-align:center;pointer-events:none}
+
+/* Clock */
+.clock-card{background:#fff;border-radius:20px;padding:28px 28px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:16px}
+.clock-date{font-size:14px;color:#7c818b;letter-spacing:.3px;margin-bottom:6px}
+.clock-time{font-size:48px;font-weight:600;letter-spacing:2px;font-variant-numeric:tabular-nums;color:#1a1d23;line-height:1.1}
+.clock-time .seconds{font-size:24px;font-weight:400;color:#9ca3b0}
+
+/* Items */
+.items-card{background:#fff;border-radius:20px;padding:20px 20px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:16px}
+.items-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.items-progress{font-size:13px;font-weight:500;color:#7c818b}
+.items-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.item-btn{display:flex;flex-direction:column;align-items:center;gap:4px;padding:14px 8px 12px;border:2px solid #eef0f4;border-radius:14px;background:#fafbfc;cursor:pointer;transition:all .2s ease;font-family:inherit;font-size:13px;color:#5a5f6b;font-weight:500;line-height:1.3}
+.item-btn:hover{border-color:#d0d4dc;background:#f5f6f8}
+.item-btn.checked{border-color:#3b6eff;background:#f0f4ff;color:#3b6eff}
+.item-btn .item-icon{font-size:26px;line-height:1}
+.item-btn.checked .item-icon{animation:iconPop .3s ease}
+@keyframes iconPop{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+/* Stats */
+.stats{display:flex;gap:10px;margin-bottom:16px}
+.stat-item{flex:1;background:#fff;border-radius:14px;padding:14px 10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.stat-num{font-size:24px;font-weight:700;color:#1a1d23}
+.stat-label{font-size:12px;color:#9ca3b0;margin-top:2px}
+
+/* Calendar */
+.cal-card{background:#fff;border-radius:20px;padding:24px 24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.cal-title{font-size:17px;font-weight:600}
+.cal-nav{display:flex;gap:4px}
+.cal-nav button{background:none;border:1px solid #e6e8ec;border-radius:8px;width:34px;height:34px;font-size:16px;cursor:pointer;color:#5a5f6b;transition:all .15s;display:flex;align-items:center;justify-content:center}
+.cal-nav button:hover{background:#f0f2f5;border-color:#d0d4dc}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.cal-weekday{font-size:12px;color:#9ca3b0;font-weight:500;padding-bottom:8px}
+.cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:500;border-radius:50%;cursor:default;color:#1a1d23;position:relative}
+.cal-day.other{color:#c8ccd4}
+.cal-day.today{background:#3b6eff;color:#fff;font-weight:600}
+.cal-day .cal-bar{display:flex;gap:2px;margin-top:2px}
+.cal-day .cal-dot{width:4px;height:4px;border-radius:50%;background:#34c759}
+.cal-day.today .cal-dot{background:rgba(255,255,255,.7)}
+.cal-day .cal-dot.empty{background:#e8edf5}
+
+/* Records */
+.records-card{background:#fff;border-radius:20px;margin-top:16px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+.records-title{font-size:15px;font-weight:600;margin-bottom:12px}
+.records-list{max-height:160px;overflow-y:auto}
+.records-list::-webkit-scrollbar{width:4px}
+.records-list::-webkit-scrollbar-thumb{background:#d0d4dc;border-radius:4px}
+.record-item{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:13px;border-bottom:1px solid #f0f2f5}
+.record-item:last-child{border-bottom:none}
+.record-date{color:#9ca3b0;min-width:80px}
+.record-item-icon{font-size:16px}
+.record-name{color:#5a5f6b;font-weight:500;min-width:40px}
+.record-time{margin-left:auto;color:#1a1d23;font-weight:500;font-variant-numeric:tabular-nums}
+.records-empty{color:#9ca3b0;font-size:14px;text-align:center;padding:20px 0}
+
+@media(max-width:480px){body{padding:12px}.app{max-width:100%}.clock-card{padding:22px 16px 18px}.clock-time{font-size:38px}.clock-time .seconds{font-size:20px}.items-card{padding:16px 14px}.items-grid{grid-template-columns:repeat(3,1fr);gap:8px}.item-btn{padding:12px 6px 10px;font-size:12px}.item-btn .item-icon{font-size:22px}.cal-card{padding:16px 12px 14px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- Dog -->
+  <div class="dog-card">
+    <div class="dog-run-track">
+      <div class="dog-runner" id="dogRunner">
+        <div class="dog-svg-wrap">
+          <svg viewBox="0 0 150 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <g class="tail-group">
+              <path d="M108 38 Q122 24 130 30 Q135 34 126 44 Q120 50 108 46Z" fill="#1a1a1a"/>
+              <path d="M126 26 Q132 22 134 28 Q135 32 130 36 Q128 32 126 26Z" fill="white"/>
+            </g>
+            <g class="body-bob">
+              <path class="leg-bl" d="M98 72 Q104 78 106 88 Q107 92 100 92 L92 92 Q88 88 90 80Z" fill="#1a1a1a"/>
+              <path class="leg-br" d="M104 68 Q112 74 116 84 Q118 88 112 88 L104 88 Q100 84 102 76Z" fill="#1a1a1a"/>
+              <ellipse cx="78" cy="56" rx="30" ry="15" fill="#1a1a1a"/>
+              <path d="M50 56 Q46 46 52 40 Q58 36 64 40 Q68 44 64 62 Q58 70 50 56Z" fill="white"/>
+              <path d="M48 44 Q54 38 62 40 Q66 43 62 48 Q56 52 50 48Z" fill="#f0f0f0" opacity=".9"/>
+              <path class="leg-left" d="M52 66 Q52 74 48 84 Q47 88 53 88 L60 88 Q62 84 60 78 Q58 70 58 66Z" fill="#f5f5f5"/>
+              <path class="leg-right" d="M64 66 Q66 74 64 84 Q63 88 69 88 L76 88 Q78 84 76 78 Q74 70 72 66Z" fill="#f5f5f5"/>
+              <ellipse cx="44" cy="40" rx="15" ry="13" fill="white"/>
+              <path d="M34 34 Q30 30 34 28 Q40 26 44 30 Q42 36 38 38 Q34 38 34 34Z" fill="#1a1a1a"/>
+              <path d="M50 34 Q54 30 52 28 Q48 26 44 30 Q44 36 48 38Q50 38 50 34Z" fill="#1a1a1a"/>
+              <path d="M42 32 Q44 30 46 32 L46 48 Q44 50 42 48Z" fill="white"/>
+              <ellipse cx="32" cy="46" rx="4.5" ry="3" fill="#1a1a1a"/>
+              <ellipse cx="32" cy="45.2" rx="2" ry="1" fill="#333"/>
+              <circle cx="38" cy="36" r="2.5" fill="#1a1a1a"/>
+              <circle cx="37.5" cy="35.5" r=".9" fill="white"/>
+              <circle cx="48" cy="36" r="2.5" fill="#1a1a1a"/>
+              <circle cx="47.5" cy="35.5" r=".9" fill="white"/>
+              <g class="dog-eye-inner">
+                <circle cx="48" cy="36" r="2.5" fill="#1a1a1a"/>
+                <circle cx="47.5" cy="35.5" r=".9" fill="white"/>
+              </g>
+              <path d="M28 50 Q32 52 36 50" stroke="#1a1a1a" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <ellipse cx="33" cy="53" rx="2.5" ry="3.5" fill="#ff7b89" opacity=".8"/>
+              <path d="M28 36 Q22 26 28 22 Q34 20 34 28 Q32 34 28 36Z" fill="#1a1a1a"/>
+              <path d="M52 28 Q58 24 60 28 Q60 34 56 38 Q54 36 52 28Z" fill="#1a1a1a"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="dog-greeting" id="dogGreeting">今天也要加油哟 🐾</div>
+    </div>
+  </div>
+
+  <!-- Clock -->
+  <div class="clock-card">
+    <div class="clock-date" id="clockDate"></div>
+    <div class="clock-time">
+      <span id="clockHour">--</span>:<span id="clockMin">--</span>
+      <span class="seconds" id="clockSec">--</span>
+    </div>
+  </div>
+
+  <!-- Items -->
+  <div class="items-card">
+    <div class="items-title">
+      <span>今日待办</span>
+      <span class="items-progress" id="itemsProgress">0 / 5</span>
+    </div>
+    <div class="items-grid" id="itemsGrid"></div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat-item"><div class="stat-num" id="statDay">0/5</div><div class="stat-label">今日完成</div></div>
+    <div class="stat-item"><div class="stat-num" id="statStreak">0</div><div class="stat-label">连续达标</div></div>
+    <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总打卡</div></div>
+  </div>
+
+  <!-- Calendar -->
+  <div class="cal-card">
+    <div class="cal-header">
+      <div class="cal-title" id="calTitle">2026 年 6 月</div>
+      <div class="cal-nav">
+        <button onclick="prevMonth()">‹</button>
+        <button onclick="nextMonth()">›</button>
+      </div>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+
+  <!-- Records -->
+  <div class="records-card">
+    <div class="records-title">打卡记录</div>
+    <div class="records-list" id="recordsList"></div>
+  </div>
+</div>
+
+<script>
+const ITEMS=[
+  {key:"健身",icon:"🏋️",label:"健身"},
+  {key:"喝水",icon:"💧",label:"喝水"},
+  {key:"学习",icon:"📚",label:"学习"},
+  {key:"睡觉",icon:"😴",label:"睡觉"},
+  {key:"遛狗",icon:"🐕",label:"遛狗"},
+]
+const STORAGE_KEY="checkin_records_v2"
+let records=[]
+try{records=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch(e){records=[]}
+let calYear,calMonth
+
+function pad(n){return String(n).padStart(2,"0")}
+function todayStr(){const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function fmtTime(d){return pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds())}
+
+function getDay(dateStr){return records.find(r=>r.date===dateStr)||null}
+
+function ensureToday(){
+  const ds=todayStr()
+  let day=getDay(ds)
+  if(!day){day={date:ds,checks:{}};records.push(day)}
+  return day
+}
+
+function toggleItem(key){
+  const day=ensureToday()
+  if(day.checks[key]){delete day.checks[key]}else{day.checks[key]=fmtTime(new Date())}
+  save()
+
+  // happy dog on any first check
+  const runner=document.getElementById("dogRunner")
+  runner.classList.remove("happy")
+  void runner.offsetWidth
+  runner.classList.add("happy")
+  const msgs=["边牧为你点赞！🐾","好棒，继续坚持！","今天也超棒！","加油加油！✧"]
+  document.getElementById("dogGreeting").innerHTML='<span style="color:#3b6eff;font-weight:600">'+msgs[Math.floor(Math.random()*msgs.length)]+'</span>'
+  clearTimeout(window._greetTimer)
+  window._greetTimer=setTimeout(()=>{
+    const n=new Date().getHours()
+    let t="今天也要加油哟"
+    if(n<6)t="这么早！边牧都惊了 🐶"
+    else if(n<9)t="早安！新的一天开始啦 ☀️"
+    else if(n<12)t="上午好，保持专注！"
+    else if(n<14)t="午休时间到，休息一下~"
+    else if(n<18)t="下午继续努力！"
+    else t="晚上好，今天辛苦啦 🌙"
+    document.getElementById("dogGreeting").innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'
+  },2500)
+}
+
+function save(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(records))
+  renderItems()
+  calcStats()
+  renderCal()
+  renderRecords()
+}
+
+function renderItems(){
+  const day=getDay(todayStr())
+  const grid=document.getElementById("itemsGrid")
+  grid.innerHTML=""
+  let count=0
+  ITEMS.forEach(item=>{
+    const checked=day&&day.checks[item.key]
+    if(checked)count++
+    const btn=document.createElement("button")
+    btn.className="item-btn"+(checked?" checked":"")
+    btn.innerHTML='<span class="item-icon">'+item.icon+'</span>'+item.label
+    btn.onclick=()=>toggleItem(item.key)
+    grid.appendChild(btn)
+  })
+  document.getElementById("itemsProgress").textContent=count+" / 5"
+  document.getElementById("statDay").textContent=count+"/5"
+}
+
+// Clock
+function updateClock(){
+  const d=new Date()
+  const w=["日","一","二","三","四","五","六"]
+  document.getElementById("clockDate").textContent=d.getFullYear()+" 年 "+(d.getMonth()+1)+" 月 "+d.getDate()+" 日 星期"+w[d.getDay()]
+  document.getElementById("clockHour").textContent=pad(d.getHours())
+  document.getElementById("clockMin").textContent=pad(d.getMinutes())
+  document.getElementById("clockSec").textContent=pad(d.getSeconds())
+}
+updateClock()
+setInterval(updateClock,1000)
+
+// Stats
+function calcStats(){
+  const checkedCount=records.reduce((sum,d)=>sum+Object.keys(d.checks).length,0)
+  document.getElementById("statTotal").textContent=checkedCount
+
+  // streak of all-5 days walking backwards from yesterday (today may be partial)
+  let streak=0
+  const d=new Date()
+  d.setDate(d.getDate()-1) // start checking from yesterday
+  // if today is all-5, also count today
+  const todayDay=getDay(todayStr())
+  if(todayDay&&Object.keys(todayDay.checks).length===ITEMS.length)streak=1
+
+  while(true){
+    const ds=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())
+    const day=getDay(ds)
+    if(day&&Object.keys(day.checks).length===ITEMS.length){
+      if(!(streak===1&&ds===todayStr())){streak++}
+    }else{break}
+    d.setDate(d.getDate()-1)
+  }
+  document.getElementById("statStreak").textContent=streak
+}
+
+// Calendar
+function initCal(){const d=new Date();calYear=d.getFullYear();calMonth=d.getMonth();renderCal()}
+function prevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCal()}
+function nextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCal()}
+
+function renderCal(){
+  document.getElementById("calTitle").textContent=calYear+" 年 "+(calMonth+1)+" 月"
+  const g=document.getElementById("calGrid")
+  g.innerHTML=""
+  ;["日","一","二","三","四","五","六"].forEach(w=>{const e=document.createElement("div");e.className="cal-weekday";e.textContent=w;g.appendChild(e)})
+  const first=new Date(calYear,calMonth,1).getDay()
+  const days=new Date(calYear,calMonth+1,0).getDate()
+  const today=todayStr()
+  const pdays=new Date(calYear,calMonth,0).getDate()
+  for(let i=first-1;i>=0;i--){const e=document.createElement("div");e.className="cal-day other";e.textContent=pdays-i;g.appendChild(e)}
+  for(let d=1;d<=days;d++){
+    const ds=calYear+"-"+pad(calMonth+1)+"-"+pad(d)
+    const day=getDay(ds)
+    const e=document.createElement("div")
+    e.className="cal-day"
+    if(ds===today)e.classList.add("today")
+    const n=day?Object.keys(day.checks).length:0
+    const txt=document.createElement("span")
+    txt.textContent=d
+    e.appendChild(txt)
+    if(n>0){
+      const bar=document.createElement("div")
+      bar.className="cal-bar"
+      for(let i=0;i<5;i++){
+        const dot=document.createElement("span")
+        dot.className="cal-dot"+(i>=n?" empty":"")
+        bar.appendChild(dot)
+      }
+      e.appendChild(bar)
+    }
+    g.appendChild(e)
+  }
+  const r=(7-g.children.length%7)%7
+  for(let i=1;i<=r;i++){const e=document.createElement("div");e.className="cal-day other";e.textContent=i;g.appendChild(e)}
+}
+
+// Records
+function renderRecords(){
+  const l=document.getElementById("recordsList")
+  l.innerHTML=""
+  const all=[]
+  records.forEach(d=>{
+    Object.entries(d.checks).forEach(([key,time])=>{
+      all.push({date:d.date,item:key,time})
+    })
+  })
+  if(!all.length){l.innerHTML='<div class="records-empty">暂无打卡记录</div>';return}
+  all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time))
+  all.slice(0,25).forEach(r=>{
+    const item=ITEMS.find(i=>i.key===r.item)
+    const el=document.createElement("div")
+    el.className="record-item"
+    el.innerHTML='<span class="record-date">'+r.date+'</span><span class="record-item-icon">'+(item?item.icon:"✓")+'</span><span class="record-name">'+r.item+'</span><span class="record-time">'+r.time+'</span>'
+    l.appendChild(el)
+  })
+}
+
+// Greeting
+;(function(){
+  const n=new Date().getHours()
+  let t="今天也要加油哟"
+  if(n<6)t="这么早！边牧都惊了 🐶"
+  else if(n<9)t="早安！新的一天开始啦 ☀️"
+  else if(n<12)t="上午好，保持专注！"
+  else if(n<14)t="午休时间到，休息一下~"
+  else if(n<18)t="下午继续努力！"
+  else t="晚上好，今天辛苦啦 🌙"
+  document.getElementById("dogGreeting").innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'
+})()
+
+initCal()
+renderItems()
+calcStats()
+renderRecords()
+</script>
+</body>
+</html>
