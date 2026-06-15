@@ -16,23 +16,8 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .dog-run-track{position:relative;width:100%;height:100%}
 .dog-runner{position:absolute;top:12px;left:-10px;width:150px;height:100px;animation:runAcross 4s ease-in-out infinite;will-change:left,transform}
 .dog-runner.happy{animation:runHappy .8s ease-in-out !important}
-@keyframes runAcross{
-  0%{left:-10px;transform:scaleX(1)}
-  42%{left:calc(100% - 140px);transform:scaleX(1)}
-  46%{left:calc(100% - 140px);transform:scaleX(1)}
-  50%{left:calc(100% - 140px);transform:scaleX(-1)}
-  92%{left:-10px;transform:scaleX(-1)}
-  96%{left:-10px;transform:scaleX(-1)}
-  100%{left:-10px;transform:scaleX(1)}
-}
-@keyframes runHappy{
-  0%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
-  15%{left:calc(50% - 75px);transform:translateY(-18px) scaleX(1)}
-  30%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
-  45%{left:calc(50% - 75px);transform:translateY(-12px) scaleX(1)}
-  60%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
-  100%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}
-}
+@keyframes runAcross{0%{left:-10px;transform:scaleX(1)}42%{left:calc(100% - 140px);transform:scaleX(1)}46%{left:calc(100% - 140px);transform:scaleX(1)}50%{left:calc(100% - 140px);transform:scaleX(-1)}92%{left:-10px;transform:scaleX(-1)}96%{left:-10px;transform:scaleX(-1)}100%{left:-10px;transform:scaleX(1)}}
+@keyframes runHappy{0%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}15%{left:calc(50% - 75px);transform:translateY(-18px) scaleX(1)}30%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}45%{left:calc(50% - 75px);transform:translateY(-12px) scaleX(1)}60%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}100%{left:calc(50% - 75px);transform:translateY(0) scaleX(1)}}
 .dog-svg-wrap{display:block;width:150px;height:100px}
 @keyframes bodyBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
 @keyframes tailWag{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(15deg)}}
@@ -83,10 +68,27 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .cal-day{aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;font-weight:500;border-radius:50%;cursor:default;color:#1a1d23;position:relative}
 .cal-day.other{color:#c8ccd4}
 .cal-day.today{background:#3b6eff;color:#fff;font-weight:600}
-.cal-day .cal-bar{display:flex;gap:2px;margin-top:2px}
-.cal-day .cal-dot{width:4px;height:4px;border-radius:50%;background:#34c759}
+.cal-day.has-check:not(.today):hover{background:#f0f2f5}
+.cal-day.has-check{cursor:pointer}
+.cal-day.today{cursor:pointer}
+.cal-day .cal-bar{display:flex;gap:1.5px;margin-top:2px}
+.cal-day .cal-dot{width:3px;height:3px;border-radius:50%;background:#34c759}
 .cal-day.today .cal-dot{background:rgba(255,255,255,.7)}
 .cal-day .cal-dot.empty{background:#e8edf5}
+
+/* Day Detail */
+.day-detail{display:none;background:#f8f9fb;border-radius:14px;padding:16px 20px;margin-top:12px}
+.day-detail.show{display:block}
+.day-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.day-detail-date{font-size:15px;font-weight:600;color:#1a1d23}
+.day-detail-close{background:none;border:none;font-size:18px;cursor:pointer;color:#9ca3b0;padding:4px;line-height:1}
+.day-detail-close:hover{color:#5a5f6b}
+.day-detail-item{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:14px;border-bottom:1px solid #eef0f4}
+.day-detail-item:last-child{border-bottom:none}
+.day-detail-item .dd-label{color:#5a5f6b;display:flex;align-items:center;gap:6px}
+.day-detail-item .dd-status{font-weight:500;font-variant-numeric:tabular-nums}
+.day-detail-item.checked .dd-status{color:#34c759}
+.day-detail-item.missed .dd-status{color:#c8ccd4}
 
 /* Records */
 .records-card{background:#fff;border-radius:20px;margin-top:16px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
@@ -164,14 +166,14 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="items-card">
     <div class="items-title">
       <span>今日待办</span>
-      <span class="items-progress" id="itemsProgress">0 / 5</span>
+      <span class="items-progress" id="itemsProgress">0 / 6</span>
     </div>
     <div class="items-grid" id="itemsGrid"></div>
   </div>
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat-item"><div class="stat-num" id="statDay">0/5</div><div class="stat-label">今日完成</div></div>
+    <div class="stat-item"><div class="stat-num" id="statDay">0/6</div><div class="stat-label">今日完成</div></div>
     <div class="stat-item"><div class="stat-num" id="statStreak">0</div><div class="stat-label">连续达标</div></div>
     <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总打卡</div></div>
   </div>
@@ -186,6 +188,14 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
       </div>
     </div>
     <div class="cal-grid" id="calGrid"></div>
+    <!-- Day Detail (click a calendar date to show) -->
+    <div class="day-detail" id="dayDetail">
+      <div class="day-detail-header">
+        <span class="day-detail-date" id="dayDetailDate"></span>
+        <button class="day-detail-close" onclick="closeDayDetail()">✕</button>
+      </div>
+      <div id="dayDetailItems"></div>
+    </div>
   </div>
 
   <!-- Records -->
@@ -202,6 +212,7 @@ const ITEMS=[
   {key:"学习",icon:"📚",label:"学习"},
   {key:"睡觉",icon:"😴",label:"睡觉"},
   {key:"遛狗",icon:"🐕",label:"遛狗"},
+  {key:"吃早餐",icon:"🥐",label:"吃早餐"},
 ]
 const STORAGE_KEY="checkin_records_v2"
 let records=[]
@@ -225,8 +236,8 @@ function toggleItem(key){
   const day=ensureToday()
   if(day.checks[key]){delete day.checks[key]}else{day.checks[key]=fmtTime(new Date())}
   save()
-
-  // happy dog on any first check
+  renderItems()
+  // happy dog
   const runner=document.getElementById("dogRunner")
   runner.classList.remove("happy")
   void runner.offsetWidth
@@ -245,6 +256,8 @@ function toggleItem(key){
     else t="晚上好，今天辛苦啦 🌙"
     document.getElementById("dogGreeting").innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'
   },2500)
+  // Show today detail
+  showDayDetail(todayStr())
 }
 
 function save(){
@@ -269,8 +282,8 @@ function renderItems(){
     btn.onclick=()=>toggleItem(item.key)
     grid.appendChild(btn)
   })
-  document.getElementById("itemsProgress").textContent=count+" / 5"
-  document.getElementById("statDay").textContent=count+"/5"
+  document.getElementById("itemsProgress").textContent=count+" / 6"
+  document.getElementById("statDay").textContent=count+"/6"
 }
 
 // Clock
@@ -289,15 +302,11 @@ setInterval(updateClock,1000)
 function calcStats(){
   const checkedCount=records.reduce((sum,d)=>sum+Object.keys(d.checks).length,0)
   document.getElementById("statTotal").textContent=checkedCount
-
-  // streak of all-5 days walking backwards from yesterday (today may be partial)
   let streak=0
   const d=new Date()
-  d.setDate(d.getDate()-1) // start checking from yesterday
-  // if today is all-5, also count today
+  d.setDate(d.getDate()-1)
   const todayDay=getDay(todayStr())
   if(todayDay&&Object.keys(todayDay.checks).length===ITEMS.length)streak=1
-
   while(true){
     const ds=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())
     const day=getDay(ds)
@@ -331,13 +340,15 @@ function renderCal(){
     e.className="cal-day"
     if(ds===today)e.classList.add("today")
     const n=day?Object.keys(day.checks).length:0
+    if(n>0){e.classList.add("has-check");e.onclick=()=>showDayDetail(ds)}
+    if(ds===today)e.onclick=()=>showDayDetail(ds)
     const txt=document.createElement("span")
     txt.textContent=d
     e.appendChild(txt)
     if(n>0){
       const bar=document.createElement("div")
       bar.className="cal-bar"
-      for(let i=0;i<5;i++){
+      for(let i=0;i<6;i++){
         const dot=document.createElement("span")
         dot.className="cal-dot"+(i>=n?" empty":"")
         bar.appendChild(dot)
@@ -348,6 +359,25 @@ function renderCal(){
   }
   const r=(7-g.children.length%7)%7
   for(let i=1;i<=r;i++){const e=document.createElement("div");e.className="cal-day other";e.textContent=i;g.appendChild(e)}
+}
+
+// Day Detail
+function showDayDetail(dateStr){
+  const day=getDay(dateStr)
+  document.getElementById("dayDetailDate").textContent=dateStr
+  const container=document.getElementById("dayDetailItems")
+  container.innerHTML=""
+  ITEMS.forEach(item=>{
+    const checked=day&&day.checks[item.key]
+    const el=document.createElement("div")
+    el.className="day-detail-item"+(checked?" checked":" missed")
+    el.innerHTML='<span class="dd-label">'+item.icon+' '+item.label+'</span><span class="dd-status">'+(checked?'✅ '+day.checks[item.key]:'❌')+'</span>'
+    container.appendChild(el)
+  })
+  document.getElementById("dayDetail").classList.add("show")
+}
+function closeDayDetail(){
+  document.getElementById("dayDetail").classList.remove("show")
 }
 
 // Records

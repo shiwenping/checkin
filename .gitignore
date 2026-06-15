@@ -5,3 +5,6 @@ service_output.txt
 svc.txt
 server_output.txt
 tunnel_url.txt
+.ssh_deploy_key
+.ssh_deploy_key.pub
+gh.zip
