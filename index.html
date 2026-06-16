@@ -1,19 +1,5 @@
 ﻿<!DOCTYPE html>
-// Music
-let audioCtx=null;
-let musicPlaying=false;
-let musicTimer=null;
-function initAudio(){if(audioCtx)return;try{const C=window.AudioContext||window.webkitAudioContext;audioCtx=new C()}catch(e){console.log(e);audioCtx=null}}
-const mN=[261.63,329.63,392.00,523.25,392.00,329.63,261.63,293.66,349.23,440.00,523.25,440.00,349.23,293.66,261.63,392.00,440.00,392.00,329.63,293.66,261.63];
-const mD=[0.35,0.35,0.35,0.55,0.25,0.25,0.55,0.35,0.35,0.35,0.55,0.25,0.25,0.55,0.25,0.25,0.25,0.25,0.25,0.25,0.5];
-let mI=0;
-function playN(){if(!musicPlaying||!audioCtx||audioCtx.state==="closed")return;try{const n=audioCtx.currentTime;const f=mN[mI];const d=mD[mI];mI=(mI+1)%mN.length;const o=audioCtx.createOscillator();const g=audioCtx.createGain();o.type="triangle";o.frequency.setValueAtTime(f,n);g.gain.setValueAtTime(0.08,n);g.gain.exponentialRampToValueAtTime(0.001,n+d);o.connect(g);g.connect(audioCtx.destination);o.start(n);o.stop(n+d);musicTimer=setTimeout(playN,d*1000*0.9)}catch(e){console.log(e)}}
-function startM(){initAudio();if(!audioCtx)return;if(audioCtx.state==="suspended"){audioCtx.resume().then(()=>{musicPlaying=true;mI=0;playN();updateBtn()}).catch(e=>{})}else{musicPlaying=true;mI=0;playN();updateBtn()}}
-function stopM(){musicPlaying=false;clearTimeout(musicTimer);updateBtn()}
-function toggleMusic(){if(musicPlaying){stopM();document.getElementById("musicBtn").innerHTML="\uD83D\uDD07"}else{startM();document.getElementById("musicBtn").innerHTML="\uD83C\uDFB5"}document.getElementById("musicBtn").classList.toggle("playing",musicPlaying);document.getElementById("musicBtn").classList.toggle("muted",!musicPlaying)}
-function updateBtn(){const b=document.getElementById("musicBtn");if(b){b.innerHTML=musicPlaying?"\uD83C\uDFB5":"\uD83D\uDD07";b.classList.toggle("playing",musicPlaying);b.classList.toggle("muted",!musicPlaying)}}
-setTimeout(()=>{if(!musicPlaying){initAudio();if(audioCtx&&audioCtx.state!=="suspended"){startM()}else if(audioCtx){document.addEventListener("click",()=>{if(!musicPlaying)startM()},{once:true})}}},3500);
-loadItems();initCal();renderAll();<html lang="zh-CN">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
