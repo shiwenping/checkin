@@ -13,6 +13,9 @@ function stopM(){musicPlaying=false;clearTimeout(musicTimer);updateBtn()}
 function toggleMusic(){if(musicPlaying){stopM();document.getElementById("musicBtn").innerHTML="\uD83D\uDD07"}else{startM();document.getElementById("musicBtn").innerHTML="\uD83C\uDFB5"}document.getElementById("musicBtn").classList.toggle("playing",musicPlaying);document.getElementById("musicBtn").classList.toggle("muted",!musicPlaying)}
 function updateBtn(){const b=document.getElementById("musicBtn");if(b){b.innerHTML=musicPlaying?"\uD83C\uDFB5":"\uD83D\uDD07";b.classList.toggle("playing",musicPlaying);b.classList.toggle("muted",!musicPlaying)}}
 setTimeout(()=>{if(!musicPlaying){initAudio();if(audioCtx&&audioCtx.state!=="suspended"){startM()}else if(audioCtx){document.addEventListener("click",()=>{if(!musicPlaying)startM()},{once:true})}}},3500);
+
+// Ensure music button works
+(function(){var b=document.getElementById("musicBtn");b&&(b.onclick=function(){window.toggleMusic()})})();
 loadItems();initCal();renderAll();<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -490,3 +493,4 @@ window.addEventListener('offline',()=>{showToast('网络已断开，数据将在
 </script>
 </body>
 </html>
+
