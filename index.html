@@ -10,8 +10,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:#f4f6fa;color:#1a1d23;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
 .app{width:100%;max-width:460px}
-
-/* Dog */
 .dog-card{background:#fff;border-radius:20px;padding:8px 0;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:16px;position:relative;overflow:hidden;height:120px}
 .dog-run-track{position:relative;width:100%;height:100%}
 .dog-runner{position:absolute;top:12px;left:-10px;width:150px;height:100px;animation:runAcross 4s ease-in-out infinite;will-change:left,transform}
@@ -31,14 +29,43 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .leg-bl{animation:legR .25s ease-in-out infinite;transform-origin:92px 82px}
 .leg-br{animation:legL .25s ease-in-out infinite;transform-origin:105px 82px}
 .dog-greeting{font-size:13px;color:#7c818b;position:absolute;bottom:10px;left:0;right:0;text-align:center;pointer-events:none}
-
-/* Clock */
+.top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;min-height:36px}
+.top-bar .app-title{font-size:18px;font-weight:700;color:#1a1d23}
+.auth-btn{background:#fff;border:1px solid #e6e8ec;border-radius:10px;padding:6px 14px;font-size:13px;font-family:inherit;cursor:pointer;color:#5a5f6b;font-weight:500;transition:all.15s;display:flex;align-items:center;gap:6px}
+.auth-btn:hover{background:#f5f6f8;border-color:#3b6eff;color:#3b6eff}
+.auth-btn.logout-btn{color:#e8453c;border-color:#fde8e8;background:#fff5f5}
+.auth-btn.logout-btn:hover{background:#fee;border-color:#e8453c}
+.user-avatar{width:22px;height:22px;border-radius:50%;background:#3b6eff;color:#fff;font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.auth-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.auth-overlay.show{display:flex}
+.auth-box{background:#fff;border-radius:24px;padding:28px;width:100%;max-width:380px;box-shadow:0 16px 48px rgba(0,0,0,.15);position:relative}
+.auth-box h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.auth-box .auth-sub{font-size:14px;color:#9ca3b0;margin-bottom:20px}
+.auth-tabs{display:flex;gap:0;margin-bottom:20px;background:#f4f6fa;border-radius:10px;padding:3px}
+.auth-tab{flex:1;padding:8px;text-align:center;border:none;border-radius:8px;background:transparent;cursor:pointer;font-size:14px;font-weight:600;font-family:inherit;color:#7c818b;transition:all.15s}
+.auth-tab.active{background:#fff;color:#1a1d23;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+.auth-fld{margin-bottom:14px}
+.auth-fld label{display:block;font-size:13px;color:#7c818b;margin-bottom:4px}
+.auth-fld input{width:100%;padding:12px 14px;border:2px solid #eef0f4;border-radius:12px;font-size:15px;font-family:inherit;outline:none;transition:border-color.15s}
+.auth-fld input:focus{border-color:#3b6eff}
+.auth-submit{width:100%;padding:12px;border:none;border-radius:12px;background:#3b6eff;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:background.15s;margin-top:4px}
+.auth-submit:hover{background:#2b5ae5}
+.auth-submit:disabled{opacity:.5;cursor:default}
+.auth-error{font-size:13px;color:#e8453c;margin-top:10px;display:none}
+.auth-error.show{display:block}
+.auth-success{font-size:13px;color:#34c759;margin-top:10px;display:none}
+.auth-success.show{display:block}
+.auth-close{position:absolute;top:16px;right:16px;width:32px;height:32px;border:none;border-radius:50%;background:#f4f6fa;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:#7c818b;transition:all.15s}
+.auth-close:hover{background:#e6e8ec}
+.loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(255,255,255,.85);z-index:150;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.loading-overlay.show{display:flex}
+.loading-spinner{width:36px;height:36px;border:3px solid #eef0f4;border-top-color:#3b6eff;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:15px;color:#7c818b;font-weight:500}
 .clock-card{background:#fff;border-radius:20px;padding:28px 28px 24px;text-align:center;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:16px}
 .clock-date{font-size:14px;color:#7c818b;letter-spacing:.3px;margin-bottom:6px}
 .clock-time{font-size:48px;font-weight:600;letter-spacing:2px;font-variant-numeric:tabular-nums;color:#1a1d23;line-height:1.1}
 .clock-time .seconds{font-size:24px;font-weight:400;color:#9ca3b0}
-
-/* Items */
 .items-card{background:#fff;border-radius:20px;padding:20px 20px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-bottom:16px}
 .items-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
 .items-progress{font-size:13px;font-weight:500;color:#7c818b}
@@ -49,7 +76,6 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .item-btn .item-icon{font-size:26px;line-height:1;pointer-events:none}
 .item-btn.checked .item-icon{animation:iconPop .3s ease}
 @keyframes iconPop{0%{transform:scale(1)}50%{transform:scale(1.25)}100%{transform:scale(1)}}
-/* Edit mode */
 .item-btn .item-del{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:2px solid #fff;background:#ff4d4f;color:#fff;font-size:12px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;transition:transform.15s}
 .item-btn .item-del:hover{transform:scale(1.15)}
 .item-btn .item-del.show{display:flex}
@@ -58,8 +84,6 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .items-header-btn{background:none;border:1px solid #e6e8ec;border-radius:8px;cursor:pointer;font-size:13px;font-family:inherit;color:#7c818b;padding:4px 12px;font-weight:500;transition:all.15s}
 .items-header-btn:hover{background:#f0f2f5;color:#3b6eff;border-color:#d0d4dc}
 .items-header-btn.editing{background:#3b6eff;border-color:#3b6eff;color:#fff}
-
-/* Add Dialog */
 .dialog-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.3);z-index:100;display:none;align-items:center;justify-content:center;padding:20px}
 .dialog-overlay.show{display:flex}
 .dialog{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,.12)}
@@ -79,18 +103,12 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .dialog-confirm{border:none;background:#3b6eff;color:#fff}
 .dialog-confirm:hover{background:#2b5ae5}
 .dialog-confirm:disabled{opacity:.4;cursor:default}
-
-/* Toast */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1d23;color:#fff;padding:10px 20px;border-radius:12px;font-size:14px;z-index:200;opacity:0;transition:opacity.3s;pointer-events:none}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1d23;color:#fff;padding:10px 20px;border-radius:12px;font-size:14px;z-index:300;opacity:0;transition:opacity.3s;pointer-events:none}
 .toast.show{opacity:1}
-
-/* Stats */
 .stats{display:flex;gap:10px;margin-bottom:16px}
 .stat-item{flex:1;background:#fff;border-radius:14px;padding:14px 10px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .stat-num{font-size:24px;font-weight:700;color:#1a1d23}
 .stat-label{font-size:12px;color:#9ca3b0;margin-top:2px}
-
-/* Calendar */
 .cal-card{background:#fff;border-radius:20px;padding:24px 24px 20px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .cal-title{font-size:17px;font-weight:600}
@@ -109,8 +127,6 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .cal-day .cal-dot{width:3px;height:3px;border-radius:50%;background:#34c759}
 .cal-day.today .cal-dot{background:rgba(255,255,255,.7)}
 .cal-day .cal-dot.empty{background:#e8edf5}
-
-/* Day Detail */
 .day-detail{display:none;background:#f8f9fb;border-radius:14px;padding:16px 20px;margin-top:12px}
 .day-detail.show{display:block}
 .day-detail-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
@@ -123,8 +139,6 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .day-detail-item .dd-status{font-weight:500;font-variant-numeric:tabular-nums}
 .day-detail-item.checked .dd-status{color:#34c759}
 .day-detail-item.missed .dd-status{color:#c8ccd4}
-
-/* Records */
 .records-card{background:#fff;border-radius:20px;margin-top:16px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
 .records-title{font-size:15px;font-weight:600;margin-bottom:12px}
 .records-list{max-height:160px;overflow-y:auto}
@@ -137,13 +151,15 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .record-name{color:#5a5f6b;font-weight:500;min-width:40px}
 .record-time{margin-left:auto;color:#1a1d23;font-weight:500;font-variant-numeric:tabular-nums}
 .records-empty{color:#9ca3b0;font-size:14px;text-align:center;padding:20px 0}
-
-@media(max-width:480px){body{padding:12px}.app{max-width:100%}.clock-card{padding:22px 16px 18px}.clock-time{font-size:38px}.clock-time .seconds{font-size:20px}.items-card{padding:16px 14px}.items-grid{grid-template-columns:repeat(3,1fr);gap:8px}.item-btn{padding:12px 6px 10px;font-size:12px}.item-btn .item-icon{font-size:22px}.cal-card{padding:16px 12px 14px}}
+@media(max-width:480px){body{padding:12px}.app{max-width:100%}.clock-card{padding:22px 16px 18px}.clock-time{font-size:38px}.clock-time .seconds{font-size:20px}.items-card{padding:16px 14px}.items-grid{grid-template-columns:repeat(3,1fr);gap:8px}.item-btn{padding:12px 6px 10px;font-size:12px}.item-btn .item-icon{font-size:22px}.cal-card{padding:16px 12px 14px}.auth-box{padding:24px 20px}}
 </style>
 </head>
 <body>
 <div class="app" id="app">
-  <!-- Dog -->
+  <div class="top-bar">
+    <span class="app-title">每日打卡</span>
+    <button class="auth-btn" id="authBtn" onclick="openAuth()">登录</button>
+  </div>
   <div class="dog-card">
     <div class="dog-run-track">
       <div class="dog-runner" id="dogRunner">
@@ -178,40 +194,23 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div class="dog-greeting" id="dogGreeting">今天也要加油哟 🐾</div>
     </div>
   </div>
-
-  <!-- Clock -->
   <div class="clock-card">
     <div class="clock-date" id="clockDate"></div>
-    <div class="clock-time">
-      <span id="clockHour">--</span>:<span id="clockMin">--</span>
-      <span class="seconds" id="clockSec">--</span>
-    </div>
+    <div class="clock-time"><span id="clockHour">--</span>:<span id="clockMin">--</span><span class="seconds" id="clockSec">--</span></div>
   </div>
-
-  <!-- Items -->
   <div class="items-card">
-    <div class="items-title">
-      <span>今日待办</span>
-      <div><button class="items-header-btn" id="editBtn" onclick="toggleEdit()">编辑</button></div>
-    </div>
+    <div class="items-title"><span>今日待办</span><div><button class="items-header-btn" id="editBtn" onclick="toggleEdit()">编辑</button></div></div>
     <div class="items-grid" id="itemsGrid"></div>
   </div>
-
-  <!-- Stats -->
   <div class="stats">
     <div class="stat-item"><div class="stat-num" id="statDay">0/0</div><div class="stat-label">今日完成</div></div>
     <div class="stat-item"><div class="stat-num" id="statStreak">0</div><div class="stat-label">连续达标</div></div>
     <div class="stat-item"><div class="stat-num" id="statTotal">0</div><div class="stat-label">总打卡</div></div>
   </div>
-
-  <!-- Calendar -->
   <div class="cal-card">
     <div class="cal-header">
       <div class="cal-title" id="calTitle">2026 年 6 月</div>
-      <div class="cal-nav">
-        <button onclick="prevMonth()">‹</button>
-        <button onclick="nextMonth()">›</button>
-      </div>
+      <div class="cal-nav"><button onclick="prevMonth()">‹</button><button onclick="nextMonth()">›</button></div>
     </div>
     <div class="cal-grid" id="calGrid"></div>
     <div class="day-detail" id="dayDetail">
@@ -222,347 +221,219 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
       <div id="dayDetailItems"></div>
     </div>
   </div>
-
-  <!-- Records -->
   <div class="records-card">
     <div class="records-title">打卡记录</div>
     <div class="records-list" id="recordsList"></div>
   </div>
 </div>
-
-<!-- Add Item Dialog -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <button class="auth-close" onclick="closeAuth()">✕</button>
+    <h2 id="authTitle">登录</h2>
+    <p class="auth-sub" id="authSub">登录后数据自动保存到云端</p>
+    <div class="auth-tabs" id="authTabs">
+      <button class="auth-tab active" onclick="switchAuthTab('login')">登录</button>
+      <button class="auth-tab" onclick="switchAuthTab('register')">注册</button>
+    </div>
+    <div class="auth-fld"><label>邮箱</label><input id="authEmail" type="email" placeholder="your@email.com" autocomplete="email"></div>
+    <div class="auth-fld"><label>密码</label><input id="authPass" type="password" placeholder="至少6位" autocomplete="current-password"></div>
+    <button class="auth-submit" id="authSubmit" onclick="submitAuth()">登录</button>
+    <div class="auth-error" id="authError"></div>
+    <div class="auth-success" id="authSuccess"></div>
+  </div>
+</div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+  <div class="loading-text" id="loadingText">同步数据中...</div>
+</div>
 <div class="dialog-overlay" id="addDialog">
   <div class="dialog">
     <div class="dialog-title">添加打卡项目</div>
-    <div class="dialog-fld">
-      <label>项目名称</label>
-      <input id="dialogName" type="text" placeholder="例如：阅读" maxlength="10" oninput="onDialogInput()">
-    </div>
-    <div class="dialog-fld">
-      <label>选择图标</label>
-      <div class="emoji-grid" id="emojiGrid"></div>
-    </div>
+    <div class="dialog-fld"><label>项目名称</label><input id="dialogName" type="text" placeholder="例如：阅读" maxlength="10" oninput="onDialogInput()"></div>
+    <div class="dialog-fld"><label>选择图标</label><div class="emoji-grid" id="emojiGrid"></div></div>
     <div class="dialog-acts">
       <button class="dialog-cancel" onclick="closeAddDialog()">取消</button>
       <button class="dialog-confirm" id="dialogConfirm" disabled onclick="addItem()">添加</button>
     </div>
   </div>
 </div>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
-
-<script>
-// ── Item Management ──────────────────────────────────────
-const DEFAULT_ITEMS=[
-  {key:"健身",icon:"🏋️",label:"健身"},
-  {key:"喝水",icon:"💧",label:"喝水"},
-  {key:"学习",icon:"📚",label:"学习"},
-  {key:"睡觉",icon:"😴",label:"睡觉"},
-  {key:"遛狗",icon:"🐕",label:"遛狗"},
-  {key:"吃早餐",icon:"🥐",label:"吃早餐"},
-]
-const ITEMS_KEY="checkin_items_v2"
-let ITEMS=[]
-let EDIT_MODE=false
-
-function loadItems(){
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>firebase.initializeApp({
+  apiKey: "AIzaSyA3bDSn9Bc-ahlXdU9ztn764Mak9K8EKsA",
+  authDomain: "shiwenping-64dc0.firebaseapp.com",
+  projectId: "shiwenping-64dc0",
+  storageBucket: "shiwenping-64dc0.firebasestorage.app",
+  messagingSenderId: "956494864390",
+  appId: "1:956494864390:web:7ab63eecc79d68496c6387",
+  measurementId: "G-K2NWCFKPKZ"
+});
+const AUTH=firebase.auth();const DB=firebase.firestore();
+let currentUser=null;let syncInProgress=false;
+AUTH.onAuthStateChanged(async(user)=>{currentUser=user;if(user){showLoading('同步数据中...');try{await syncDataFromCloud()}catch(e){}hideLoading()}updateAuthUI()});
+function updateAuthUI(){
+  const btn=document.getElementById('authBtn');
+  if(currentUser){
+    const e=currentUser.email||'';
+    btn.innerHTML='<span class="user-avatar">'+e[0].toUpperCase()+'</span>'+e.split('@')[0];
+    btn.className='auth-btn logout-btn';btn.onclick=logout;
+  }else{btn.textContent='登录';btn.className='auth-btn';btn.onclick=openAuth}
+}
+let _authTab='login';
+function openAuth(){if(currentUser)return;document.getElementById('authOverlay').classList.add('show');switchAuthTab('login')}
+function closeAuth(){document.getElementById('authOverlay').classList.remove('show');document.getElementById('authError').classList.remove('show');document.getElementById('authSuccess').classList.remove('show')}
+function switchAuthTab(t){
+  _authTab=t;
+  document.querySelectorAll('.auth-tab').forEach(e=>e.classList.toggle('active',e.textContent===(t==='login'?'登录':'注册')));
+  document.getElementById('authTitle').textContent=t==='login'?'登录':'注册';
+  document.getElementById('authSub').textContent=t==='login'?'登录后数据自动保存到云端':'创建账号，打卡数据永不丢失';
+  document.getElementById('authSubmit').textContent=t==='login'?'登录':'注册';
+  document.getElementById('authError').classList.remove('show');document.getElementById('authSuccess').classList.remove('show');
+}
+async function submitAuth(){
+  const email=document.getElementById('authEmail').value.trim();const pass=document.getElementById('authPass').value;
+  const errEl=document.getElementById('authError');const sucEl=document.getElementById('authSuccess');
+  errEl.classList.remove('show');sucEl.classList.remove('show');document.getElementById('authSubmit').disabled=true;
   try{
-    const s=localStorage.getItem(ITEMS_KEY)
-    if(s){ITEMS=JSON.parse(s);return}
+    if(_authTab==='login'){await AUTH.signInWithEmailAndPassword(email,pass)}
+    else{await AUTH.createUserWithEmailAndPassword(email,pass);sucEl.textContent='注册成功！正在同步...';sucEl.classList.add('show')}
+    closeAuth()
+  }catch(e){
+    const msgs={'auth/user-not-found':'账号不存在，请先注册','auth/wrong-password':'密码错误','auth/invalid-email':'邮箱格式不正确','auth/weak-password':'密码至少6位','auth/email-already-in-use':'该邮箱已注册，请直接登录','auth/invalid-credential':'邮箱或密码错误'};
+    errEl.textContent=msgs[e.code]||e.message;errEl.classList.add('show')
+  }
+  document.getElementById('authSubmit').disabled=false;
+}
+async function logout(){if(!confirm('退出登录？本地数据会保留，下次登录后自动同步。'))return;AUTH.signOut();showToast('已退出登录')}
+async function syncDataFromCloud(){
+  if(!currentUser)return;syncInProgress=true;const uid=currentUser.uid;
+  try{
+    const d=await DB.collection('users').doc(uid).collection('data').doc('items').get();
+    if(d.exists){const ci=d.data().list||[];if(ci.length>0){const lh=localStorage.getItem(ITEMS_KEY);if(!lh||lh===JSON.stringify(DEFAULT_ITEMS)){ITEMS=ci}}}
   }catch(e){}
-  ITEMS=DEFAULT_ITEMS.map(i=>({...i}))
-}
-function saveItems(){
-  localStorage.setItem(ITEMS_KEY,JSON.stringify(ITEMS))
-  renderItems()
-  calcStats()
-  renderCal()
-  renderRecords()
-}
-function genKey(name){
-  return name.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g,'')
-}
-function addItem(){
-  const name=document.getElementById("dialogName").value.trim()
-  if(!name)return
-  const selEmoji=document.querySelector(".emoji-opt.sel")
-  const icon=selEmoji?selEmoji.textContent:"✓"
-  const key=genKey(name)+"_"+Date.now()
-  ITEMS.push({key,icon,label:name})
-  saveItems()
-  closeAddDialog()
-  showToast("已添加「"+name+"」")
-}
-function deleteItem(key,label){
-  if(!confirm("删除「"+label+"」吗？打卡记录会保留，但项目将从列表中移除。"))return
-  ITEMS=ITEMS.filter(i=>i.key!==key)
-  saveItems()
-  showToast("已删除「"+label+"」")
-}
-
-// ── Edit Mode ────────────────────────────────────────────
-function toggleEdit(){
-  EDIT_MODE=!EDIT_MODE
-  const btn=document.getElementById("editBtn")
-  btn.textContent=EDIT_MODE?"完成":"编辑"
-  btn.classList.toggle("editing",EDIT_MODE)
-  renderItems()
-}
-
-// ── Add Dialog ───────────────────────────────────────────
-const EMOJIS="🏋️ 💧 📚 😴 🐕 🥐 📖 🎯 💪 🏃 🧘 🎨 🎵 🖋️ 📷 🎮 🧹 🌱 ❤️ 🎉 🔥 ⚡ ☕ 🍎 🥗 🍳 🏡 🎬 ✈️ 🛒 🧠 💼 🌿 🎵 🎸".split(" ")
-let _selEmoji=null
-
-function showAddDialog(){
-  _selEmoji=null
-  document.getElementById("dialogName").value=""
-  document.getElementById("dialogConfirm").disabled=true
-  document.getElementById("addDialog").classList.add("show")
-  const g=document.getElementById("emojiGrid")
-  g.innerHTML=""
-  EMOJIS.forEach(e=>{
-    const el=document.createElement("span")
-    el.className="emoji-opt"
-    el.textContent=e
-    el.onclick=()=>{
-      document.querySelectorAll(".emoji-opt").forEach(x=>x.classList.remove("sel"))
-      el.classList.add("sel")
-      _selEmoji=e
-      onDialogInput()
+  try{
+    const snap=await DB.collection('users').doc(uid).collection('records').get();
+    const cr=[];snap.forEach(doc=>{if(doc.id!=='__items__')cr.push({date:doc.id,checks:doc.data().checks||{}})});
+    if(cr.length>0){
+      const today=todayStr();const lm={};records.forEach(r=>lm[r.date]=r.checks);const merged={};
+      cr.forEach(r=>merged[r.date]=r.checks);if(lm[today])merged[today]=lm[today];
+      records.forEach(r=>{if(!merged[r.date])merged[r.date]=r.checks});
+      records=Object.entries(merged).map(([d,c])=>({date:d,checks:c}));
     }
-    g.appendChild(el)
-  })
-  setTimeout(()=>document.getElementById("dialogName").focus(),100)
+  }catch(e){}
+  try{
+    const d=await DB.collection('users').doc(uid).collection('data').doc('items').get();
+    if(!d.exists&&ITEMS.length>0)await DB.collection('users').doc(uid).collection('data').doc('items').set({list:ITEMS});
+  }catch(e){}
+  await pushRecordsToCloud();
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(records));localStorage.setItem(ITEMS_KEY,JSON.stringify(ITEMS));renderAll();syncInProgress=false;
 }
-function closeAddDialog(){
-  document.getElementById("addDialog").classList.remove("show")
+async function pushRecordsToCloud(){if(!currentUser)return;try{const b=DB.batch();records.forEach(r=>{b.set(DB.collection('users').doc(currentUser.uid).collection('records').doc(r.date),{checks:r.checks},{merge:true})});await b.commit()}catch(e){}}
+async function pushItemsToCloud(){if(!currentUser)return;try{await DB.collection('users').doc(currentUser.uid).collection('data').doc('items').set({list:ITEMS})}catch(e){}}
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(records));renderItems();calcStats();renderCal();renderRecords();if(currentUser&&!syncInProgress){pushRecordsToCloud();pushItemsToCloud()}}
+const DEFAULT_ITEMS=[{key:"健身",icon:"🏋️",label:"健身"},{key:"喝水",icon:"💧",label:"喝水"},{key:"学习",icon:"📚",label:"学习"},{key:"睡觉",icon:"😴",label:"睡觉"},{key:"遛狗",icon:"🐕",label:"遛狗"},{key:"吃早餐",icon:"🥐",label:"吃早餐"}];
+const ITEMS_KEY="checkin_items_v2";let ITEMS=[];let EDIT_MODE=false;
+function loadItems(){try{const s=localStorage.getItem(ITEMS_KEY);if(s){ITEMS=JSON.parse(s);return}}catch(e){}ITEMS=DEFAULT_ITEMS.map(i=>({...i}))}
+function saveItems(){localStorage.setItem(ITEMS_KEY,JSON.stringify(ITEMS));save()}
+function genKey(n){return n.trim().toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/g,'')}
+function addItem(){
+  const name=document.getElementById('dialogName').value.trim();if(!name)return;
+  const sel=document.querySelector('.emoji-opt.sel');const icon=sel?sel.textContent:'✓';
+  const key=genKey(name)+'_'+Date.now();ITEMS.push({key,icon,label:name});saveItems();closeAddDialog();showToast('已添加「'+name+'」');
 }
-function onDialogInput(){
-  const name=document.getElementById("dialogName").value.trim()
-  document.getElementById("dialogConfirm").disabled=!name
-}
-
-// ── Toast ────────────────────────────────────────────────
-function showToast(msg){
-  const t=document.getElementById("toast")
-  t.textContent=msg
-  t.classList.add("show")
-  clearTimeout(t._timer)
-  t._timer=setTimeout(()=>t.classList.remove("show"),2500)
-}
-
-// ── Data ─────────────────────────────────────────────────
-const STORAGE_KEY="checkin_records_v2"
-let records=[]
-try{records=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch(e){records=[]}
-let calYear,calMonth
-
+function deleteItem(key,label){if(!confirm('删除「'+label+'」吗？打卡记录会保留，但项目将从列表中移除。'))return;ITEMS=ITEMS.filter(i=>i.key!==key);saveItems();showToast('已删除「'+label+'」')}
+function toggleEdit(){EDIT_MODE=!EDIT_MODE;const btn=document.getElementById('editBtn');btn.textContent=EDIT_MODE?'完成':'编辑';btn.classList.toggle('editing',EDIT_MODE);renderItems()}
+const EMOJIS="🏋️ 💧 📚 😴 🐕 🥐 📖 🎯 💪 🏃 🧘 🎨 🎵 🖋️ 📷 🎮 🧹 🌱 ❤️ 🎉 🔥 ⚡ ☕ 🍎 🥗 🍳 🏡 🎬 ✈️ 🛒 🧠 💼 🌿 🎵 🎸".split(" ");
+function showAddDialog(){document.getElementById('dialogName').value='';document.getElementById('dialogConfirm').disabled=true;document.getElementById('addDialog').classList.add('show');const g=document.getElementById('emojiGrid');g.innerHTML='';EMOJIS.forEach(e=>{const el=document.createElement('span');el.className='emoji-opt';el.textContent=e;el.onclick=()=>{document.querySelectorAll('.emoji-opt').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');onDialogInput()};g.appendChild(el)});setTimeout(()=>document.getElementById('dialogName').focus(),100)}
+function closeAddDialog(){document.getElementById('addDialog').classList.remove('show')}
+function onDialogInput(){const name=document.getElementById('dialogName').value.trim();document.getElementById('dialogConfirm').disabled=!name}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2500)}
+function showLoading(m){document.getElementById('loadingText').textContent=m||'同步中...';document.getElementById('loadingOverlay').classList.add('show')}
+function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
+const STORAGE_KEY="checkin_records_v2";let records=[];try{records=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch(e){}
+let calYear,calMonth;
 function pad(n){return String(n).padStart(2,"0")}
 function todayStr(){const d=new Date();return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
 function fmtTime(d){return pad(d.getHours())+":"+pad(d.getMinutes())+":"+pad(d.getSeconds())}
-function getDay(dateStr){return records.find(r=>r.date===dateStr)||null}
-function ensureToday(){
-  const ds=todayStr()
-  let day=getDay(ds)
-  if(!day){day={date:ds,checks:{}};records.push(day)}
-  return day
-}
-
-// ── Toggle Check ─────────────────────────────────────────
+function getDay(ds){return records.find(r=>r.date===ds)||null}
+function ensureToday(){const ds=todayStr();let d=getDay(ds);if(!d){d={date:ds,checks:{}};records.push(d)}return d}
 function toggleItem(key){
-  const day=ensureToday()
+  const day=ensureToday();
   if(day.checks[key]){delete day.checks[key]}else{day.checks[key]=fmtTime(new Date())}
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(records))
-  renderItems()
-  calcStats()
-  renderCal()
-  renderRecords()
-  // happy dog
-  const runner=document.getElementById("dogRunner")
-  runner.classList.remove("happy")
-  void runner.offsetWidth
-  runner.classList.add("happy")
-  const msgs=["边牧为你点赞！🐾","好棒，继续坚持！","今天也超棒！","加油加油！✧"]
-  document.getElementById("dogGreeting").innerHTML='<span style="color:#3b6eff;font-weight:600">'+msgs[Math.floor(Math.random()*msgs.length)]+'</span>'
-  clearTimeout(window._greetTimer)
-  window._greetTimer=setTimeout(()=>{
-    const n=new Date().getHours()
-    let t="今天也要加油哟"
-    if(n<6)t="这么早！边牧都惊了 🐶"
-    else if(n<9)t="早安！新的一天开始啦 ☀️"
-    else if(n<12)t="上午好，保持专注！"
-    else if(n<14)t="午休时间到，休息一下~"
-    else if(n<18)t="下午继续努力！"
-    else t="晚上好，今天辛苦啦 🌙"
-    document.getElementById("dogGreeting").innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'
-  },2500)
-  showDayDetail(todayStr())
+  save();const runner=document.getElementById('dogRunner');runner.classList.remove('happy');void runner.offsetWidth;runner.classList.add('happy');
+  const msgs=['边牧为你点赞！🐾','好棒，继续坚持！','今天也超棒！','加油加油！✧'];
+  document.getElementById('dogGreeting').innerHTML='<span style="color:#3b6eff;font-weight:600">'+msgs[Math.floor(Math.random()*msgs.length)]+'</span>';
+  clearTimeout(window._greetTimer);window._greetTimer=setTimeout(()=>{
+    const n=new Date().getHours();let t='今天也要加油哟';
+    if(n<6)t='这么早！边牧都惊了 🐶';else if(n<9)t='早安！新的一天开始啦 ☀️';else if(n<12)t='上午好，保持专注！';else if(n<14)t='午休时间到，休息一下~';else if(n<18)t='下午继续努力！';else t='晚上好，今天辛苦啦 🌙';
+    document.getElementById('dogGreeting').innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'
+  },2500);showDayDetail(todayStr())
 }
-
-// ── Render Items ─────────────────────────────────────────
+function renderAll(){renderItems();calcStats();renderCal();renderRecords()}
 function renderItems(){
-  const day=getDay(todayStr())
-  const grid=document.getElementById("itemsGrid")
-  grid.innerHTML=""
-  let count=0
+  const day=getDay(todayStr());const grid=document.getElementById('itemsGrid');grid.innerHTML='';let count=0;
   ITEMS.forEach(item=>{
-    const checked=day&&day.checks[item.key]
-    if(checked)count++
-    const btn=document.createElement("button")
-    btn.className="item-btn"+(checked?" checked":"")
-    btn.innerHTML='<span class="item-icon">'+item.icon+'</span>'+item.label
-    if(EDIT_MODE){
-      const del=document.createElement("span")
-      del.className="item-del show"
-      del.textContent="✕"
-      del.onclick=(e)=>{e.stopPropagation();deleteItem(item.key,item.label)}
-      btn.appendChild(del)
-    }
-    btn.onclick=()=>EDIT_MODE||toggleItem(item.key)
-    grid.appendChild(btn)
-  })
-  if(EDIT_MODE){
-    const addBtn=document.createElement("button")
-    addBtn.className="add-item-btn"
-    addBtn.innerHTML='<span style="font-size:22px">+</span>添加项目'
-    addBtn.onclick=showAddDialog
-    grid.appendChild(addBtn)
-  }
-  const total=ITEMS.length
-  document.getElementById("itemsProgress").textContent=count+" / "+total
-  document.getElementById("statDay").textContent=count+"/"+total
-  // Update progress display
+    const checked=day&&day.checks[item.key];if(checked)count++;
+    const btn=document.createElement('button');btn.className='item-btn'+(checked?' checked':'');btn.innerHTML='<span class="item-icon">'+item.icon+'</span>'+item.label;
+    if(EDIT_MODE){const del=document.createElement('span');del.className='item-del show';del.textContent='✕';del.onclick=e=>{e.stopPropagation();deleteItem(item.key,item.label)};btn.appendChild(del)}
+    btn.onclick=()=>EDIT_MODE||toggleItem(item.key);grid.appendChild(btn);
+  });
+  if(EDIT_MODE){const a=document.createElement('button');a.className='add-item-btn';a.innerHTML='<span style="font-size:22px">+</span>添加项目';a.onclick=showAddDialog;grid.appendChild(a)}
+  const t=ITEMS.length;document.getElementById('itemsProgress').textContent=count+' / '+t;document.getElementById('statDay').textContent=count+'/'+t;
 }
-
-// ── Clock ────────────────────────────────────────────────
-function updateClock(){
-  const d=new Date()
-  const w=["日","一","二","三","四","五","六"]
-  document.getElementById("clockDate").textContent=d.getFullYear()+" 年 "+(d.getMonth()+1)+" 月 "+d.getDate()+" 日 星期"+w[d.getDay()]
-  document.getElementById("clockHour").textContent=pad(d.getHours())
-  document.getElementById("clockMin").textContent=pad(d.getMinutes())
-  document.getElementById("clockSec").textContent=pad(d.getSeconds())
-}
-updateClock()
-setInterval(updateClock,1000)
-
-// ── Stats ────────────────────────────────────────────────
+function updateClock(){const d=new Date();const w=['日','一','二','三','四','五','六'];document.getElementById('clockDate').textContent=d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日 星期'+w[d.getDay()];document.getElementById('clockHour').textContent=pad(d.getHours());document.getElementById('clockMin').textContent=pad(d.getMinutes());document.getElementById('clockSec').textContent=pad(d.getSeconds())}
+updateClock();setInterval(updateClock,1000);
 function calcStats(){
-  const checkedCount=records.reduce((sum,d)=>sum+Object.keys(d.checks).length,0)
-  document.getElementById("statTotal").textContent=checkedCount
-  let streak=0
-  const d=new Date()
-  d.setDate(d.getDate()-1)
-  const todayDay=getDay(todayStr())
-  if(todayDay&&Object.keys(todayDay.checks).length===ITEMS.length)streak=1
-  while(true){
-    const ds=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())
-    const day=getDay(ds)
-    if(day&&Object.keys(day.checks).length===ITEMS.length){
-      if(!(streak===1&&ds===todayStr())){streak++}
-    }else{break}
-    d.setDate(d.getDate()-1)
-  }
-  document.getElementById("statStreak").textContent=streak
+  const cc=records.reduce((s,d)=>s+Object.keys(d.checks).length,0);document.getElementById('statTotal').textContent=cc;
+  let streak=0;const d=new Date();d.setDate(d.getDate()-1);const td=getDay(todayStr());
+  if(td&&Object.keys(td.checks).length===ITEMS.length)streak=1;
+  while(true){const ds=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());const day=getDay(ds);if(day&&Object.keys(day.checks).length===ITEMS.length){if(!(streak===1&&ds===todayStr()))streak++}else break;d.setDate(d.getDate()-1)}
+  document.getElementById('statStreak').textContent=streak;
 }
-
-// ── Calendar ─────────────────────────────────────────────
 function initCal(){const d=new Date();calYear=d.getFullYear();calMonth=d.getMonth();renderCal()}
 function prevMonth(){calMonth--;if(calMonth<0){calMonth=11;calYear--}renderCal()}
 function nextMonth(){calMonth++;if(calMonth>11){calMonth=0;calYear++}renderCal()}
 function renderCal(){
-  document.getElementById("calTitle").textContent=calYear+" 年 "+(calMonth+1)+" 月"
-  const g=document.getElementById("calGrid");g.innerHTML=""
-  ;["日","一","二","三","四","五","六"].forEach(w=>{const e=document.createElement("div");e.className="cal-weekday";e.textContent=w;g.appendChild(e)})
-  const first=new Date(calYear,calMonth,1).getDay()
-  const days=new Date(calYear,calMonth+1,0).getDate()
-  const today=todayStr()
-  const pdays=new Date(calYear,calMonth,0).getDate()
-  for(let i=first-1;i>=0;i--){const e=document.createElement("div");e.className="cal-day other";e.textContent=pdays-i;g.appendChild(e)}
-  const totalItems=ITEMS.length
+  document.getElementById('calTitle').textContent=calYear+' 年 '+(calMonth+1)+' 月';
+  const g=document.getElementById('calGrid');g.innerHTML='';
+  ;['日','一','二','三','四','五','六'].forEach(w=>{const e=document.createElement('div');e.className='cal-weekday';e.textContent=w;g.appendChild(e)});
+  const first=new Date(calYear,calMonth,1).getDay(),days=new Date(calYear,calMonth+1,0).getDate(),today=todayStr(),pdays=new Date(calYear,calMonth,0).getDate();
+  for(let i=first-1;i>=0;i--){const e=document.createElement('div');e.className='cal-day other';e.textContent=pdays-i;g.appendChild(e)}
+  const ti=ITEMS.length;
   for(let d=1;d<=days;d++){
-    const ds=calYear+"-"+pad(calMonth+1)+"-"+pad(d)
-    const day=getDay(ds)
-    const e=document.createElement("div");e.className="cal-day"
-    if(ds===today)e.classList.add("today")
-    const n=day?Object.keys(day.checks).length:0
-    if(n>0){e.classList.add("has-check");e.onclick=()=>showDayDetail(ds)}
-    if(ds===today)e.onclick=()=>showDayDetail(ds)
-    const txt=document.createElement("span");txt.textContent=d;e.appendChild(txt)
-    if(n>0){
-      const bar=document.createElement("div");bar.className="cal-bar"
-      for(let i=0;i<totalItems;i++){
-        const dot=document.createElement("span");dot.className="cal-dot"+(i>=n?" empty":"");bar.appendChild(dot)
-      }
-      e.appendChild(bar)
-    }
-    g.appendChild(e)
+    const ds=calYear+'-'+pad(calMonth+1)+'-'+pad(d);const day=getDay(ds);
+    const e=document.createElement('div');e.className='cal-day';if(ds===today)e.classList.add('today');
+    const n=day?Object.keys(day.checks).length:0;
+    if(n>0&&EDIT_MODE==false){e.classList.add('has-check');e.onclick=()=>showDayDetail(ds)}
+    if(ds===today)e.onclick=()=>showDayDetail(ds);
+    const txt=document.createElement('span');txt.textContent=d;e.appendChild(txt);
+    if(n>0){const bar=document.createElement('div');bar.className='cal-bar';for(let i=0;i<ti;i++){const dot=document.createElement('span');dot.className='cal-dot'+(i>=n?' empty':'');bar.appendChild(dot)}e.appendChild(bar)}
+    g.appendChild(e);
   }
-  const r=(7-g.children.length%7)%7
-  for(let i=1;i<=r;i++){const e=document.createElement("div");e.className="cal-day other";e.textContent=i;g.appendChild(e)}
+  const r=(7-g.children.length%7)%7;for(let i=1;i<=r;i++){const e=document.createElement('div');e.className='cal-day other';e.textContent=i;g.appendChild(e)}
 }
-
-// ── Day Detail ───────────────────────────────────────────
 function showDayDetail(dateStr){
-  const day=getDay(dateStr)
-  document.getElementById("dayDetailDate").textContent=dateStr
-  const container=document.getElementById("dayDetailItems");container.innerHTML=""
-  const allKeys=new Set()
-  if(day)Object.keys(day.checks).forEach(k=>allKeys.add(k))
-  ITEMS.forEach(item=>{
-    if(allKeys.has(item.key))allKeys.delete(item.key)
-    const checked=day&&day.checks[item.key]
-    const el=document.createElement("div");el.className="day-detail-item"+(checked?" checked":" missed")
-    el.innerHTML='<span class="dd-label">'+item.icon+' '+item.label+'</span><span class="dd-status">'+(checked?'✅ '+day.checks[item.key]:'❌')+'</span>'
-    container.appendChild(el)
-  })
-  // Show deleted items that still have check-ins on this date
-  allKeys.forEach(k=>{
-    const el=document.createElement("div");el.className="day-detail-item checked"
-    el.innerHTML='<span class="dd-label">'+k+'</span><span class="dd-status">✅ '+day.checks[k]+'</span>'
-    container.appendChild(el)
-  })
-  document.getElementById("dayDetail").classList.add("show")
+  const day=getDay(dateStr);document.getElementById('dayDetailDate').textContent=dateStr;
+  const container=document.getElementById('dayDetailItems');container.innerHTML='';const allKeys=new Set();
+  if(day)Object.keys(day.checks).forEach(k=>allKeys.add(k));
+  ITEMS.forEach(item=>{if(allKeys.has(item.key))allKeys.delete(item.key);const checked=day&&day.checks[item.key];const el=document.createElement('div');el.className='day-detail-item'+(checked?' checked':' missed');el.innerHTML='<span class="dd-label">'+item.icon+' '+item.label+'</span><span class="dd-status">'+(checked?'✅ '+day.checks[item.key]:'❌')+'</span>';container.appendChild(el)});
+  allKeys.forEach(k=>{const el=document.createElement('div');el.className='day-detail-item checked';el.innerHTML='<span class="dd-label">'+k+'</span><span class="dd-status">✅ '+(day?day.checks[k]:'')+'</span>';container.appendChild(el)});
+  document.getElementById('dayDetail').classList.add('show');
 }
-function closeDayDetail(){document.getElementById("dayDetail").classList.remove("show")}
-
-// ── Records ──────────────────────────────────────────────
+function closeDayDetail(){document.getElementById('dayDetail').classList.remove('show')}
 function renderRecords(){
-  const l=document.getElementById("recordsList");l.innerHTML=""
-  const all=[]
-  records.forEach(d=>{
-    Object.entries(d.checks).forEach(([key,time])=>all.push({date:d.date,item:key,time}))
-  })
+  const l=document.getElementById('recordsList');l.innerHTML='';const all=[];
+  records.forEach(d=>{Object.entries(d.checks).forEach(([k,t])=>all.push({date:d.date,item:k,time:t}))});
   if(!all.length){l.innerHTML='<div class="records-empty">暂无打卡记录</div>';return}
-  all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time))
-  all.slice(0,25).forEach(r=>{
-    const item=ITEMS.find(i=>i.key===r.item)
-    const el=document.createElement("div");el.className="record-item"
-    el.innerHTML='<span class="record-date">'+r.date+'</span><span class="record-item-icon">'+(item?item.icon:"✓")+'</span><span class="record-name">'+(item?item.label:r.item)+'</span><span class="record-time">'+r.time+'</span>'
-    l.appendChild(el)
-  })
+  all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));
+  all.slice(0,25).forEach(r=>{const item=ITEMS.find(i=>i.key===r.item);const el=document.createElement('div');el.className='record-item';el.innerHTML='<span class="record-date">'+r.date+'</span><span class="record-item-icon">'+(item?item.icon:'✓')+'</span><span class="record-name">'+(item?item.label:r.item)+'</span><span class="record-time">'+r.time+'</span>';l.appendChild(el)});
 }
-
-// ── Greeting ─────────────────────────────────────────────
-;(function(){
-  const n=new Date().getHours()
-  let t="今天也要加油哟"
-  if(n<6)t="这么早！边牧都惊了 🐶"
-  else if(n<9)t="早安！新的一天开始啦 ☀️"
-  else if(n<12)t="上午好，保持专注！"
-  else if(n<14)t="午休时间到，休息一下~"
-  else if(n<18)t="下午继续努力！"
-  else t="晚上好，今天辛苦啦 🌙"
-  document.getElementById("dogGreeting").innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'
-})()
-
-// ── Init ─────────────────────────────────────────────────
-loadItems()
-initCal()
-renderItems()
-calcStats()
-renderRecords()
+;(function(){const n=new Date().getHours();let t='今天也要加油哟';if(n<6)t='这么早！边牧都惊了 🐶';else if(n<9)t='早安！新的一天开始啦 ☀️';else if(n<12)t='上午好，保持专注！';else if(n<14)t='午休时间到，休息一下~';else if(n<18)t='下午继续努力！';else t='晚上好，今天辛苦啦 🌙';document.getElementById('dogGreeting').innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'})();
+loadItems();initCal();renderAll();
+window.addEventListener('online',()=>{if(currentUser&&!syncInProgress){showToast('网络已恢复，正在同步...');syncDataFromCloud().catch(()=>{})}});
+window.addEventListener('offline',()=>{showToast('网络已断开，数据将在本地保存')});
 </script>
 </body>
 </html>
