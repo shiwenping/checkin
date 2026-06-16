@@ -169,7 +169,7 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .record-time{margin-left:auto;color:#1a1d23;font-weight:500;font-variant-numeric:tabular-nums}
 .records-empty{color:#9ca3b0;font-size:14px;text-align:center;padding:20px 0}
 @media(max-width:480px){body{padding:12px}.app{max-width:100%}.clock-card{padding:22px 16px 18px}.clock-time{font-size:38px}.clock-time .seconds{font-size:20px}.items-card{padding:16px 14px}.items-grid{grid-template-columns:repeat(3,1fr);gap:8px}.item-btn{padding:12px 6px 10px;font-size:12px}.item-btn .item-icon{font-size:22px}.cal-card{padding:16px 12px 14px}.auth-box{padding:24px 20px}}
-</style>
+.music-btn{position:fixed;bottom:24px;left:50%;margin-left:80px;width:40px;height:40px;border-radius:50%;border:2px solid #eef0f4;background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:all.2s;color:#5a5f6b}.music-btn:hover{background:#f5f6f8;border-color:#3b6eff;color:#3b6eff;box-shadow:0 4px 12px rgba(59,110,255,.15)}.music-btn.playing{border-color:#3b6eff;background:#f0f4ff;color:#3b6eff}.music-btn.muted{opacity:.6}</style>
 </head>
 <body>
 <div class="splash" id="splash">
@@ -273,6 +273,7 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
     <div class="records-list" id="recordsList"></div>
   </div>
 </div>
+<button class="music-btn muted" id="musicBtn" onclick="toggleMusic()">🔇</button>
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <button class="auth-close" onclick="closeAuth()">✕</button>
@@ -457,6 +458,19 @@ function closeDayDetail(){document.getElementById('dayDetail').classList.remove(
 function renderRecords(){const l=document.getElementById('recordsList');l.innerHTML='';const all=[];records.forEach(d=>{Object.entries(d.checks).forEach(([k,t])=>all.push({date:d.date,item:k,time:t}))});if(!all.length){l.innerHTML='<div class="records-empty">暂无打卡记录</div>';return};all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));all.slice(0,25).forEach(r=>{const item=ITEMS.find(i=>i.key===r.item);const el=document.createElement('div');el.className='record-item';el.innerHTML='<span class="record-date">'+r.date+'</span><span class="record-item-icon">'+(item?item.icon:'✓')+'</span><span class="record-name">'+(item?item.label:r.item)+'</span><span class="record-time">'+r.time+'</span>';l.appendChild(el)})}
 ;(function(){const n=new Date().getHours();let t='今天也要加油哟';if(n<6)t='这么早！边牧都惊了 🐶';else if(n<9)t='早安！新的一天开始啦 ☀️';else if(n<12)t='上午好，保持专注！';else if(n<14)t='午休时间到，休息一下~';else if(n<18)t='下午继续努力！';else t='晚上好，今天辛苦啦 🌙';document.getElementById('dogGreeting').innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'})();
 loadItems();initCal();renderAll();
+// Music
+let audioCtx=null;let musicPlaying=false;let musicTimer=null;
+function initAudio(){if(audioCtx)return;try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+const mNotes=[261.63,329.63,392.00,523.25,392.00,329.63,261.63,293.66,349.23,440.00,523.25,440.00,349.23,293.66,261.63,392.00,440.00,392.00,329.63,293.66,261.63];
+const mDurs=[0.35,0.35,0.35,0.55,0.25,0.25,0.55,0.35,0.35,0.35,0.55,0.25,0.25,0.55,0.25,0.25,0.25,0.25,0.25,0.25,0.5];
+let mIdx=0;
+function playNote(){if(!musicPlaying||!audioCtx||audioCtx.state==="closed")return;try{if(audioCtx.state==="suspended")audioCtx.resume();const now=audioCtx.currentTime;const f=mNotes[mIdx];const d=mDurs[mIdx];mIdx=(mIdx+1)%mNotes.length;const osc=audioCtx.createOscillator();const g=audioCtx.createGain();osc.type="triangle";osc.frequency.setValueAtTime(f,now);osc.frequency.linearRampToValueAtTime(f*1.005,now+d*0.1);g.gain.setValueAtTime(0.04,now);g.gain.linearRampToValueAtTime(0.03,now+d*0.3);g.gain.exponentialRampToValueAtTime(0.001,now+d*0.9);osc.connect(g);g.connect(audioCtx.destination);osc.start(now);osc.stop(now+d);musicTimer=setTimeout(playNote,d*1000*0.9)}catch(e){}}
+function startMusic(){initAudio();if(!audioCtx)return;musicPlaying=true;mIdx=0;if(audioCtx.state==="suspended")audioCtx.resume();playNote();updateMusicBtn()}
+function stopMusic(){musicPlaying=false;clearTimeout(musicTimer);updateMusicBtn()}
+function toggleMusic(){if(musicPlaying){stopMusic();document.getElementById("musicBtn").innerHTML="🔇"}else{startMusic();document.getElementById("musicBtn").innerHTML="🎵"}document.getElementById("musicBtn").classList.toggle("playing",musicPlaying);document.getElementById("musicBtn").classList.toggle("muted",!musicPlaying)}
+function updateMusicBtn(){const b=document.getElementById("musicBtn");if(b){b.innerHTML=musicPlaying?"🎵":"🔇";b.classList.toggle("playing",musicPlaying);b.classList.toggle("muted",!musicPlaying)}}
+setTimeout(()=>{if(!musicPlaying){initAudio();if(audioCtx&&audioCtx.state!=="suspended"){startMusic()}else if(audioCtx){document.addEventListener("click",()=>{if(!musicPlaying)startMusic()},{once:true})}}},3500);
+
 window.addEventListener('online',()=>{if(currentUser&&!syncInProgress){showToast('网络已恢复，正在同步...');syncDataFromCloud().catch(()=>{})}});
 window.addEventListener('offline',()=>{showToast('网络已断开，数据将在本地保存')});
 </script>
