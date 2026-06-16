@@ -169,6 +169,7 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .record-time{margin-left:auto;color:#1a1d23;font-weight:500;font-variant-numeric:tabular-nums}
 .records-empty{color:#9ca3b0;font-size:14px;text-align:center;padding:20px 0}
 @media(max-width:480px){body{padding:12px}.app{max-width:100%}.clock-card{padding:22px 16px 18px}.clock-time{font-size:38px}.clock-time .seconds{font-size:20px}.items-card{padding:16px 14px}.items-grid{grid-template-columns:repeat(3,1fr);gap:8px}.item-btn{padding:12px 6px 10px;font-size:12px}.item-btn .item-icon{font-size:22px}.cal-card{padding:16px 12px 14px}.auth-box{padding:24px 20px}}
+.music-btn{position:fixed;bottom:24px;left:50%;margin-left:80px;width:40px;height:40px;border-radius:50%;border:2px solid #eef0f4;background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:all.2s;color:#5a5f6b}.music-btn:hover{background:#f5f6f8;border-color:#3b6eff;color:#3b6eff}.music-btn.playing{border-color:#3b6eff;background:#f0f4ff;color:#3b6eff}.music-btn.muted{opacity:.6}
 </style>
 </head>
 <body>
@@ -203,6 +204,7 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
   <div class="splash-sub">今天也要加油哟 🐾</div>
   <div class="splash-dots"><span></span><span></span><span></span></div>
 </div>
+<button class="music-btn muted" id="musicBtn" onclick="toggleMusic()">🔇</button>
 <div class="app" id="app">
   <div class="top-bar">
     <span class="app-title">每日打卡</span>
@@ -456,6 +458,62 @@ function showDayDetail(dateStr){
 function closeDayDetail(){document.getElementById('dayDetail').classList.remove('show')}
 function renderRecords(){const l=document.getElementById('recordsList');l.innerHTML='';const all=[];records.forEach(d=>{Object.entries(d.checks).forEach(([k,t])=>all.push({date:d.date,item:k,time:t}))});if(!all.length){l.innerHTML='<div class="records-empty">暂无打卡记录</div>';return};all.sort((a,b)=>b.date.localeCompare(a.date)||b.time.localeCompare(a.time));all.slice(0,25).forEach(r=>{const item=ITEMS.find(i=>i.key===r.item);const el=document.createElement('div');el.className='record-item';el.innerHTML='<span class="record-date">'+r.date+'</span><span class="record-item-icon">'+(item?item.icon:'✓')+'</span><span class="record-name">'+(item?item.label:r.item)+'</span><span class="record-time">'+r.time+'</span>';l.appendChild(el)})}
 ;(function(){const n=new Date().getHours();let t='今天也要加油哟';if(n<6)t='这么早！边牧都惊了 🐶';else if(n<9)t='早安！新的一天开始啦 ☀️';else if(n<12)t='上午好，保持专注！';else if(n<14)t='午休时间到，休息一下~';else if(n<18)t='下午继续努力！';else t='晚上好，今天辛苦啦 🌙';document.getElementById('dogGreeting').innerHTML=t+' <span style="color:#3b6eff;font-weight:600">🐾</span>'})();
+
+(function(){
+var audio=null,isPlaying=false,url=null;
+
+function genWav(){
+  var sr=44100;
+  var notes=[261.63,329.63,392.00,523.25,392.00,329.63,261.63,293.66,349.23,440.00,523.25,440.00,349.23,293.66,261.63,392.00,440.00,392.00,329.63,293.66,261.63];
+  var durs=[0.35,0.35,0.35,0.55,0.25,0.25,0.55,0.35,0.35,0.35,0.55,0.25,0.25,0.55,0.25,0.25,0.25,0.25,0.25,0.25,0.50];
+  var total=0;durs.forEach(function(d){total+=d});
+  var len=Math.floor(sr*total);
+  var buf=new ArrayBuffer(44+len*2);
+  var v=new DataView(buf);
+  function w(s,p){for(var i=0;i<s.length;i++)v.setUint8(p+i,s.charCodeAt(i))}
+  w("RIFF",0);v.setUint32(4,36+len*2,true);w("WAVE",8);
+  w("fmt ",12);v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);
+  v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);
+  w("data",36);v.setUint32(40,len*2,true);
+  var off=0;
+  for(var i=0;i<notes.length;i++){
+    var f=notes[i],dur=durs[i],samples=Math.floor(sr*dur);
+    for(var s=0;s<samples;s++){
+      var t=s/sr,env=Math.exp(-2.5*t/dur),val=Math.sin(2*Math.PI*f*t)*env*0.3;
+      var samp=Math.max(-1,Math.min(1,val));
+      v.setInt16(44+off*2,samp<0?samp*32768:samp*32767,true);
+      off++;
+    }
+  }
+  return URL.createObjectURL(new Blob([buf],{type:"audio/wav"}));
+}
+
+window.toggleMusic=function(){
+  if(isPlaying){
+    if(audio){audio.pause()}
+    isPlaying=false;
+  }else{
+    if(!audio){url=genWav();audio=new Audio(url);audio.loop=true;audio.volume=0.3}
+    audio.currentTime=0;
+    audio.play().catch(function(){});
+    isPlaying=true;
+  }
+  var b=document.getElementById("musicBtn");
+  if(b){b.innerHTML=isPlaying?"\uD83C\uDFB5":"\uD83D\uDD07";b.className="music-btn"+(isPlaying?" playing":" muted")}
+};
+
+setTimeout(function(){
+  if(!isPlaying){
+    url=genWav();audio=new Audio(url);audio.loop=true;audio.volume=0.3;
+    audio.play().then(function(){
+      isPlaying=true;
+      var b=document.getElementById("musicBtn");
+      if(b){b.innerHTML="\uD83C\uDFB5";b.className="music-btn playing"}
+    }).catch(function(){audio=null})
+  }
+},3500);
+})();
+
 loadItems();initCal();renderAll();
 window.addEventListener('online',()=>{if(currentUser&&!syncInProgress){showToast('网络已恢复，正在同步...');syncDataFromCloud().catch(()=>{})}});
 window.addEventListener('offline',()=>{showToast('网络已断开，数据将在本地保存')});
