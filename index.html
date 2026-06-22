@@ -306,9 +306,13 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
     </div>
   </div>
 </div>
-<div class="toast" id="toast"></div><script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<div class="toast" id="toast"></div>
+
+
+
+<script>
+(function(){['firebase-app-compat','firebase-auth-compat','firebase-firestore-compat'].forEach(function(m){var e=document.createElement('script');e.src='https://www.gstatic.com/firebasejs/10.14.1/'+m+'.js';e.async=true;document.head.appendChild(e)})})();
+</script>
 <script>
 // ── Splash ──────────────────────────────────────────────
 setTimeout(()=>{
@@ -325,9 +329,17 @@ firebase.initializeApp({
   appId: "1:956494864390:web:7ab63eecc79d68496c6387",
   measurementId: "G-K2NWCFKPKZ"
 });
-const AUTH=firebase.auth();const DB=firebase.firestore();
+var AUTH=null;var DB=null;var FB_READY=false;function initFB(){if(typeof firebase!=='undefined'&&!FB_READY){try{firebase.initializeApp({
+  apiKey: "AIzaSyA3bDSn9Bc-ahlXdU9ztn764Mak9K8EKsA",
+  authDomain: "shiwenping-64dc0.firebaseapp.com",
+  projectId: "shiwenping-64dc0",
+  storageBucket: "shiwenping-64dc0.firebasestorage.app",
+  messagingSenderId: "956494864390",
+  appId: "1:956494864390:web:7ab63eecc79d68496c6387",
+  measurementId: "G-K2NWCFKPKZ"
+});AUTH=firebase.auth();DB=firebase.firestore();FB_READY=true;AUTH.onAuthStateChanged(async function(user){currentUser=user;if(user){showLoading('同步数据中...');try{await syncDataFromCloud()}catch(e){}hideLoading()}updateAuthUI()})}catch(e){}}if(!FB_READY)setTimeout(initFB,500)}initFB();
 let currentUser=null;let syncInProgress=false;
-AUTH.onAuthStateChanged(async(user)=>{currentUser=user;if(user){showLoading('同步数据中...');try{await syncDataFromCloud()}catch(e){}hideLoading()}updateAuthUI()});
+
 function updateAuthUI(){
   const btn=document.getElementById('authBtn');
   if(currentUser){
@@ -514,52 +526,6 @@ setTimeout(function(){
 },3500);
 })();
 
-
-
-// Badge System
-const BADGE_KEY="checkin_badges_v1";
-var badges=[];
-try{badges=JSON.parse(localStorage.getItem(BADGE_KEY)||"[]")}catch(e){}
-const BADGE_DEFS=[{id:"week7",icon:"🏆",label:"一周打卡达人",desc:"连续7天全部完成打卡",check:function(){return getStreak()>=7}}];
-
-function getStreak(){
-  var s=0;var d=new Date();d.setDate(d.getDate()-1);
-  var td=getDay(todayStr());
-  if(td&&Object.keys(td.checks).length===ITEMS.length)s=1;
-  while(true){
-    var ds=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
-    var day=getDay(ds);
-    if(day&&Object.keys(day.checks).length===ITEMS.length){if(!(s===1&&ds===todayStr()))s++}else break;
-    d.setDate(d.getDate()-1)
-  }
-  return s;
-}
-
-function checkBadges(){
-  BADGE_DEFS.forEach(function(def){
-    if(badges.some(function(b){return b.id===def.id}))return;
-    if(def.check()){
-      badges.push({id:def.id,icon:def.icon,label:def.label,desc:def.desc,earned:todayStr()});
-      localStorage.setItem(BADGE_KEY,JSON.stringify(badges));
-      renderBadges();
-      showToast("🎉 解锁徽章: "+def.label);
-    }
-  });
-}
-
-function renderBadges(){
-  var g=document.getElementById("badgesGrid");
-  if(!g)return;g.innerHTML="";
-  BADGE_DEFS.forEach(function(def){
-    var b=badges.find(function(x){return x.id===def.id});
-    var e=document.createElement("div");
-    e.className="badge-item"+(b?" earned":" locked");
-    e.innerHTML=b?'<div class="badge-icon">'+def.icon+'</div><div class="badge-name">'+def.label+'</div><div class="badge-desc">'+def.desc+'</div><div class="badge-date">'+b.earned+'</div>':'<div class="badge-locked-icon">🏆</div><div class="badge-name">??</div><div class="badge-desc">连续7天全部完成</div>';
-    g.appendChild(e);
-  });
-}
-
-// Update calcStats to use getStreak
 
 
 // Badge System
