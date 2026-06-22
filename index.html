@@ -170,7 +170,7 @@ body{font-family:"Inter",-apple-system,BlinkMacSystemFont,sans-serif;background:
 .records-empty{color:#9ca3b0;font-size:14px;text-align:center;padding:20px 0}
 @media(max-width:480px){body{padding:12px}.app{max-width:100%}.clock-card{padding:22px 16px 18px}.clock-time{font-size:38px}.clock-time .seconds{font-size:20px}.items-card{padding:16px 14px}.items-grid{grid-template-columns:repeat(3,1fr);gap:8px}.item-btn{padding:12px 6px 10px;font-size:12px}.item-btn .item-icon{font-size:22px}.cal-card{padding:16px 12px 14px}.auth-box{padding:24px 20px}}
 .music-btn{position:fixed;bottom:24px;left:50%;margin-left:80px;width:40px;height:40px;border-radius:50%;border:2px solid #eef0f4;background:#fff;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:all.2s;color:#5a5f6b}.music-btn:hover{background:#f5f6f8;border-color:#3b6eff;color:#3b6eff}.music-btn.playing{border-color:#3b6eff;background:#f0f4ff;color:#3b6eff}.music-btn.muted{opacity:.6}
-</style>
+.badges-card{background:#fff;border-radius:20px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-top:16px}.badges-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:6px}.badges-grid{display:flex;gap:10px;flex-wrap:wrap}.badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 14px;border-radius:14px;background:#f8f9fb;text-align:center;flex:1;min-width:100px;transition:all.3s}.badge-item.earned{background:#fffbe6;border:2px solid #ffd700;box-shadow:0 2px 8px rgba(255,215,0,.2)}.badge-item.locked{opacity:.45}.badge-icon{font-size:36px;line-height:1}.badge-locked-icon{font-size:36px;filter:grayscale(1);opacity:.5}.badge-name{font-size:13px;font-weight:600;color:#1a1d23;line-height:1.3}.badge-desc{font-size:11px;color:#9ca3b0;line-height:1.3}.badge-date{font-size:10px;color:#b8860b;margin-top:2px}.badges-card{background:#fff;border-radius:20px;padding:20px 24px;box-shadow:0 2px 12px rgba(0,0,0,.06);margin-top:16px}.badges-title{font-size:15px;font-weight:600;margin-bottom:14px;display:flex;align-items:center;gap:6px}.badges-grid{display:flex;gap:10px;flex-wrap:wrap}.badge-item{display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 14px;border-radius:14px;background:#f8f9fb;text-align:center;flex:1;min-width:100px}.badge-item.earned{background:#fffbe6;border:2px solid #ffd700}.badge-item.locked{opacity:.45}.badge-icon{font-size:36px;line-height:1}.badge-locked-icon{font-size:36px;filter:grayscale(1);opacity:.5}.badge-name{font-size:13px;font-weight:600;color:#1a1d23}.badge-desc{font-size:11px;color:#9ca3b0}.badge-date{font-size:10px;color:#b8860b;margin-top:2px}</style>
 </head>
 <body>
 <div class="splash" id="splash">
@@ -387,7 +387,7 @@ async function syncDataFromCloud(){
 }
 async function pushRecordsToCloud(){if(!currentUser)return;try{const b=DB.batch();records.forEach(r=>{b.set(DB.collection('users').doc(currentUser.uid).collection('records').doc(r.date),{checks:r.checks},{merge:true})});await b.commit()}catch(e){}}
 async function pushItemsToCloud(){if(!currentUser)return;try{await DB.collection('users').doc(currentUser.uid).collection('data').doc('items').set({list:ITEMS})}catch(e){}}
-function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(records));renderItems();calcStats();renderCal();renderRecords();if(currentUser&&!syncInProgress){pushRecordsToCloud();pushItemsToCloud()}}
+function save(){localStorage.setItem(STORAGE_KEY,JSON.stringify(records));renderItems();calcStats();renderCal();renderRecords();checkBadges();if(currentUser&&!syncInProgress){pushRecordsToCloud();pushItemsToCloud()}}
 const DEFAULT_ITEMS=[{key:"健身",icon:"🏋️",label:"健身"},{key:"喝水",icon:"💧",label:"喝水"},{key:"学习",icon:"📚",label:"学习"},{key:"睡觉",icon:"😴",label:"睡觉"},{key:"遛狗",icon:"🐕",label:"遛狗"},{key:"吃早餐",icon:"🥐",label:"吃早餐"}];
 const ITEMS_KEY="checkin_items_v2";let ITEMS=[];let EDIT_MODE=false;
 function loadItems(){try{const s=localStorage.getItem(ITEMS_KEY);if(s){ITEMS=JSON.parse(s);return}}catch(e){}ITEMS=DEFAULT_ITEMS.map(i=>({...i}))}
@@ -514,7 +514,63 @@ setTimeout(function(){
 },3500);
 })();
 
-loadItems();initCal();renderAll();
+
+
+// Badge System
+const BADGE_KEY="checkin_badges_v1";
+var badges=[];
+try{badges=JSON.parse(localStorage.getItem(BADGE_KEY)||"[]")}catch(e){}
+const BADGE_DEFS=[{id:"week7",icon:"🏆",label:"一周打卡达人",desc:"连续7天全部完成打卡",check:function(){return getStreak()>=7}}];
+
+function getStreak(){
+  var s=0;var d=new Date();d.setDate(d.getDate()-1);
+  var td=getDay(todayStr());
+  if(td&&Object.keys(td.checks).length===ITEMS.length)s=1;
+  while(true){
+    var ds=d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+    var day=getDay(ds);
+    if(day&&Object.keys(day.checks).length===ITEMS.length){if(!(s===1&&ds===todayStr()))s++}else break;
+    d.setDate(d.getDate()-1)
+  }
+  return s;
+}
+
+function checkBadges(){
+  BADGE_DEFS.forEach(function(def){
+    if(badges.some(function(b){return b.id===def.id}))return;
+    if(def.check()){
+      badges.push({id:def.id,icon:def.icon,label:def.label,desc:def.desc,earned:todayStr()});
+      localStorage.setItem(BADGE_KEY,JSON.stringify(badges));
+      renderBadges();
+      showToast("🎉 解锁徽章: "+def.label);
+    }
+  });
+}
+
+function renderBadges(){
+  var g=document.getElementById("badgesGrid");
+  if(!g)return;g.innerHTML="";
+  BADGE_DEFS.forEach(function(def){
+    var b=badges.find(function(x){return x.id===def.id});
+    var e=document.createElement("div");
+    e.className="badge-item"+(b?" earned":" locked");
+    e.innerHTML=b?'<div class="badge-icon">'+def.icon+'</div><div class="badge-name">'+def.label+'</div><div class="badge-desc">'+def.desc+'</div><div class="badge-date">'+b.earned+'</div>':'<div class="badge-locked-icon">🏆</div><div class="badge-name">??</div><div class="badge-desc">连续7天全部完成</div>';
+    g.appendChild(e);
+  });
+}
+
+// Update calcStats to use getStreak
+
+
+// Badge System
+const BADGE_KEY='checkin_badges_v1';
+var badges=[];
+try{badges=JSON.parse(localStorage.getItem(BADGE_KEY)||'[]')}catch(e){}
+const BADGE_DEFS=[{id:'week7',icon:'\uD83C\uDFC6',label:'\u4E00\u5468\u6253\u5361\u8FBE\u4EBA',desc:'\u8FDE\u7EED7\u5929\u5168\u90E8\u5B8C\u6210\u6253\u5361',check:function(){return getStreak()>=7}}];
+function getStreak(){var s=0;var d=new Date();d.setDate(d.getDate()-1);var td=getDay(todayStr());if(td&&Object.keys(td.checks).length===ITEMS.length)s=1;while(true){var ds=d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());var day=getDay(ds);if(day&&Object.keys(day.checks).length===ITEMS.length){if(!(s===1&&ds===todayStr()))s++}else break;d.setDate(d.getDate()-1)}return s}
+function checkBadges(){BADGE_DEFS.forEach(function(def){if(badges.some(function(b){return b.id===def.id}))return;if(def.check()){badges.push({id:def.id,icon:def.icon,label:def.label,desc:def.desc,earned:todayStr()});localStorage.setItem(BADGE_KEY,JSON.stringify(badges));renderBadges();setTimeout(function(){showToast('\uD83C\uDF89 \u89E3\u9501\u5FBD\u7AE0: '+def.label)},500)}})}
+function renderBadges(){var g=document.getElementById('badgesGrid');if(!g)return;g.innerHTML='';BADGE_DEFS.forEach(function(def){var b=badges.find(function(x){return x.id===def.id});var e=document.createElement('div');e.className='badge-item'+(b?' earned':' locked');if(b){e.innerHTML='<div class="badge-icon">'+def.icon+'</div><div class="badge-name">'+def.label+'</div><div class="badge-desc">'+def.desc+'</div><div class="badge-date">'+b.earned+'</div>'}else{e.innerHTML='<div class="badge-locked-icon">\uD83C\uDFC6</div><div class="badge-name">????</div><div class="badge-desc">\u8FDE\u7EED7\u5929\u5168\u90E8\u5B8C\u6210</div>'}g.appendChild(e)})}
+loadItems();initCal();renderAll();renderBadges();checkBadges();
 window.addEventListener('online',()=>{if(currentUser&&!syncInProgress){showToast('网络已恢复，正在同步...');syncDataFromCloud().catch(()=>{})}});
 window.addEventListener('offline',()=>{showToast('网络已断开，数据将在本地保存')});
 </script>
